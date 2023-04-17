@@ -2,14 +2,13 @@ import { useRef,useState,useEffect } from 'react';
 import { Appearance, defineOptions, ink, Instance, } from 'ink-mde';
 
 type Props = {
-  content: string | null
+  content: string
   onChange: (content: string) => void
 }
 
 const Editor = ({content,onChange}: Props) => {
     const ref = useRef<HTMLDivElement | null>(null)
-    const [editor, setEditor] = useState<Instance | null>(null)
-    const [text,setText] = useState<String>("")
+    const [editor, setEditor] = useState<Instance | null>(null);
     const options = defineOptions({
       doc: content || undefined,
       files: {
@@ -17,7 +16,6 @@ const Editor = ({content,onChange}: Props) => {
       },
       hooks: {
         afterUpdate: (doc: string) => {
-          setText(doc);
           onChange(doc);
         },
       },
@@ -27,12 +25,18 @@ const Editor = ({content,onChange}: Props) => {
         toolbar: true,
         lists: true,
       },
+    });
+
+    // For some reason, the editor doesnt seem to update the text content from options or the state, so using JS to update it programmatically
+    useEffect( () => {
+      editor?.update(content);
     })
-  
+
     useEffect(() => {
       if (ref.current && ref.current.children.length <= 0) {
         const editor = ink(ref.current, options)
         setEditor(editor)
+
       }
     }, [ref])
   

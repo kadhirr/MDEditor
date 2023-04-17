@@ -16,7 +16,9 @@ const Edit = () => {
   const [tags,setTags] = useState<string[]>([]);
   const [allTags,setAllTags] = useState<string[]>([]);
   let urlParams = useParams();
-  const updateFunction = (doc: string) => {setContent(doc)}
+  
+  const updateFunction = (doc: string) => {setContent(doc)};
+
   async function saveContent(event: React.MouseEvent<HTMLButtonElement>){
     await saveNote();
   }
@@ -49,7 +51,9 @@ const Edit = () => {
           setTags(data.tags);
         }
       }
+      setLoading(false);
     }
+
 
     
     // setContent()
