@@ -4,6 +4,8 @@ import { getAllTags } from '../utils/dbHelpers'
 import Select from 'react-select'
 import NavBar from '../components/NavBar'
 import Card from '../components/Card';
+import { useNavigate } from 'react-router-dom'
+import {FaSearch} from 'react-icons/fa'
 
 type CardProps = {
     card:Note
@@ -16,6 +18,7 @@ const Home = () => {
     const [isloaded,setLoaded] = useState<boolean>(false);
     const [searchQuery,setSearchQuery] = useState<string>("");
     const [searchTags,setSearchTags] = useState<string[]>([]);
+    const navigate = useNavigate();
 
 
 
@@ -33,17 +36,6 @@ const Home = () => {
         console.log("Tags",tagsStored)
 
     };
-
-
-    async function createNote(){
-        const result = await db.notes.add({
-            name:"",
-            tags:[],
-            content:""
-        })
-        console.log("RESULT",result);
-    };
-
 
     const searchFilter = () => {
         let selectedNotes = notes;
@@ -69,17 +61,15 @@ const Home = () => {
   return (
     <>
     {isloaded && <>
-        <NavBar />
+        <NavBar showNewButton/>
         <div className='flex justify-center gap-x-10 m-5'>
             <input className='border-2 border-black focus:border-red w-[40vw]' type='text' onChange={(e) => setSearchQuery(e.target.value)}></input>
             <Select className='w-[30vw]' isClearable isMulti options={tags.map((d)=> {return {label:d,value:d}})} onChange={(options) => setSearchTags(options.map((val) => val.value))}/>
-            <button className='border-2 border-black p-2 bg-indigo-200' onClick={searchFilter}>Search</button>
-            
+            <button className='text-2xl border-2 border-black p-2 bg-indigo-200' onClick={searchFilter}><FaSearch /></button>
         </div>
-        <button className='border-2 border-black p-2 text-center' onClick={createNote}>Create</button>
-        <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-2 m-10 gap-12'>
             {shownNotes.map((data) => {
-                return (<Card styles='border-2 min-w-fit p-2 cursor-pointer' note={data} key={data.id}/>)
+                return (<Card styles='border-2 min-w-fit p-2' note={data} key={data.id}/>)
             })}
         </div>
         

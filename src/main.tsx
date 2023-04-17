@@ -16,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/edit/:noteId",
     element: <Edit/>
+  },
+  {
+    path: "/edit",
+    element: <Edit/>
   }
 ]);
 
